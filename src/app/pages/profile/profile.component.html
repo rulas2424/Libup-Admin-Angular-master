@@ -1,0 +1,132 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-tab-group animationDuration="2000ms">
+                    <mat-tab label="Datos de perfil">
+                        <br>
+
+                        <form [formGroup]="formUsers" (ngSubmit)="updateUser()" novalidate>
+                            <div mat-dialog-content>
+                                <div class="row">
+
+                                    <div class="avatar-upload">
+                                        <div class="avatar-edit">
+                                            <input type="file" id="imageUpload" style="display: none" accept="image/png,image/jpg,image/jpeg" (change)="onUpdateFileChange($event)" name="updateFile" class="img-upload-btn" />
+                                            <label class="label-edit" for="imageUpload"> <mat-icon class="icon-label">edit</mat-icon></label>
+                                        </div>
+
+                                        <img id="imagePreview" src="{{imageProfile}}" alt="profile picture">
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput placeholder="Nombre" type="text" maxlength="30" formControlName="name" required autocomplete="new-text">
+                                            <mat-error *ngIf="formUsers.get('name').hasError('required')">
+                                                El nombre de usuario es requerido.
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput placeholder="Apellidos" maxlength="40" type="text" formControlName="lastName" required autocomplete="new-text">
+                                            <mat-error *ngIf="formUsers.get('lastName').hasError('required')">
+                                                Los apellidos son requeridos.
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput placeholder="Email" type="text" maxlength="200" formControlName="email" required autocomplete="new-text">
+                                            <mat-error *ngIf="formUsers.get('email').hasError('required')">
+                                                El email es requerido.
+                                            </mat-error>
+
+                                            <mat-error *ngIf="formUsers.get('email').hasError('pattern')">
+                                                Ingresa un email valido.
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput type="text" maxlength="10" placeholder="Teléfono" formControlName="phoneNumber" autocomplete="new-text">
+                                            <mat-error *ngIf="formUsers.get('phoneNumber').hasError('pattern')">
+                                                Solo se permiten números
+                                            </mat-error>
+
+                                            <mat-error *ngIf="formUsers.get('phoneNumber').hasError('minlength')">
+                                                La longitud minima es de 10 caracteres
+                                            </mat-error>
+
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div style="float: right">
+                                    <button type="submit" class="btn btn-primary">Actualizar Datos</button>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-tab>
+                    <mat-tab label="Cambiar contraseña">
+                        <form [formGroup]="passForm" (ngSubmit)="changePassword()" novalidate>
+                            <div mat-dialog-content>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput placeholder="Contraseña actual" type="password" maxlength="32" formControlName="currentPassword" required autocomplete="new-text">
+                                            <mat-error *ngIf="passForm.get('currentPassword').hasError('required')">
+                                                La contraseña actual es requerida.
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput placeholder="Contraseña" type="password" maxlength="32" formControlName="password" required autocomplete="new-text">
+                                            <mat-error *ngIf="passForm.get('password').hasError('required')">
+                                                La nueva contraseña es requerida.
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 margin-div-input">
+                                        <mat-form-field>
+                                            <input matInput placeholder="Confirmar contraseña" maxlength="32" type="password" formControlName="confirmPassword" required autocomplete="new-text">
+                                            <mat-error *ngIf="passForm.get('confirmPassword').hasError('required')">
+                                                Confirmar contraseña es requerido.
+                                            </mat-error>
+                                            <mat-error *ngIf="passForm.get('confirmPassword').hasError('mustMatch')">
+                                                Las contraseñas deben coincidir.
+                                            </mat-error>
+
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div style="float: right">
+                                    <button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-card-content>
+
+        </mat-card>
+
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>

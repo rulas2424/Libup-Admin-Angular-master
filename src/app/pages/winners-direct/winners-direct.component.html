@@ -1,0 +1,302 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    Lista de ganadores directos
+                </mat-card-title>
+                <table mat-table [dataSource]="listWinners" *ngIf="listWinners.length > 0">
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Ganador </th>
+                        <td mat-cell *matCellDef="let element"> {{element.userWinner.name}} {{element.userWinner.lastName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="premio">
+                        <th mat-header-cell *matHeaderCellDef> Premio </th>
+                        <td mat-cell *matCellDef="let element"> {{element.awardWinner.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                        <td mat-cell *matCellDef="let element"> {{element.statusWinner}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="dateWinner">
+                        <th mat-header-cell *matHeaderCellDef> Fecha de gane </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dateWinner}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="detail">
+                        <th mat-header-cell *matHeaderCellDef> Detalles </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="info" matTooltip="Ver a detalle el premio." (click)="openDetails(element, detail)">
+                                <mat-icon class="mat-18 material-icons color_green">details</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="reclaim">
+                        <th mat-header-cell *matHeaderCellDef> Reclamar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="accent" matTooltip="Reclamar el premio." [disabled]="element.statusWinner !== 'Ganado'" (click)="reclaimAward(element, reclaim)">
+                                <mat-icon class="mat-18 material-icons">receipt</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div *ngIf="listWinners.length === 0 && isLoaded == true" class="alert alert-empty" role="alert">
+                    No existen ganadores!
+                </div>
+                <mat-paginator *ngIf="listWinners.length > 0" #paginator [length]="totalLength" [pageIndex]="pageIndex" [pageSize]="limit" [pageSizeOptions]="pageLimit" (page)="changePage($event)">
+                </mat-paginator>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+
+<!--detail modal -->
+<ng-template #detail>
+    <h1 mat-dialog-title>Detalle del premio</h1>
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-12">
+                <mat-tab-group>
+                    <mat-tab label="Premio">
+                        <mat-list>
+                            <mat-list-item>
+                                <span>Premio:</span> {{premio}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Código:</span> {{codigo}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Fecha de inicio:</span> {{fechaInicio}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Fecha de termino:</span> {{fechaTermino}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Url Promo:</span> {{urlPromo}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Url términos y condiciones:</span> {{termino}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Imagen:</span>
+
+                            </mat-list-item>
+                        </mat-list>
+                        <div class="col-12">
+                            <div style="text-align: center">
+                                <img style="cursor: pointer;" src="{{serverImages}}{{imagePremio}}" (click)="openModalImage(imageModal)" alt="logotipo" height="50">
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Usuario Ganador">
+                        <mat-list>
+                            <mat-list-item>
+                                <span>Email:</span> {{email}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Teléfono:</span> {{telefono}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Nombre:</span> {{nombreUser}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Apellidos:</span> {{lastName}}
+                            </mat-list-item>
+                            <mat-list-item>
+                                <span>Fecha de gane:</span> {{fechaGane}}
+                            </mat-list-item>
+
+                            <mat-list-item>
+                                <span>Estatus gane:</span> {{estatusWinner}}
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-tab>
+
+                    <mat-tab label="Tienda">
+                        <mat-list>
+                            <mat-list-item>
+                                <span>Tienda:</span> {{tienda}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Sucursales:</span>
+                            </mat-list-item>
+                        </mat-list>
+                        <mat-list role="list" *ngFor="let item of sucursales">
+                            <mat-list-item role="listitem">
+                                <span>Direccion:</span> {{item.address}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <span>Tipo:</span> {{item.branchType}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <span>Teléfono:</span> {{item.phoneNumber}}</mat-list-item>
+                            <mat-divider></mat-divider>
+
+                        </mat-list>
+                    </mat-tab>
+                </mat-tab-group>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <mat-dialog-actions align="end">
+            <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+        </mat-dialog-actions>
+    </div>
+
+</ng-template>
+<!-- detail modal -->
+
+<!-- open image modal -->
+<ng-template #imageModal>
+    <h1 mat-dialog-title>Imagen del premio</h1>
+    <div mat-dialog-content>
+        <img src="{{serverImages}}{{imagePremio}}" alt="logotipo" width="600">
+
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+
+
+</ng-template>
+
+<!-- ////open image modal -->
+
+
+<!-- validar reclamar -->
+<ng-template #reclaim>
+    <h1 mat-dialog-title>¿Deseas cambiar el estatus del premio?</h1>
+
+    <h5>Si entregaste el premio al ganador presiona actualizar estatus</h5>
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-12">
+                <mat-tab-group>
+                    <mat-tab label="Premio">
+                        <mat-list>
+                            <mat-list-item>
+                                <span>Premio:</span> {{premio}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Código:</span> {{codigo}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Fecha de inicio:</span> {{fechaInicio}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Fecha de termino:</span> {{fechaTermino}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Url Promo:</span> {{urlPromo}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Url términos y condiciones:</span> {{termino}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Imagen:</span>
+
+                            </mat-list-item>
+                        </mat-list>
+                        <div class="col-12">
+                            <div style="text-align: center">
+                                <img style="cursor: pointer;" src="{{serverImages}}{{imagePremio}}" (click)="openModalImage(imageModal)" alt="logotipo" height="50">
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Usuario Ganador">
+                        <mat-list>
+                            <mat-list-item>
+                                <span>Email:</span> {{email}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Teléfono:</span> {{telefono}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Nombre:</span> {{nombreUser}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Apellidos:</span> {{lastName}}
+                            </mat-list-item>
+                            <mat-list-item>
+                                <span>Fecha de gane:</span> {{fechaGane}}
+                            </mat-list-item>
+
+                            <mat-list-item>
+                                <span>Estatus gane:</span> {{estatusWinner}}
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-tab>
+
+                    <mat-tab label="Tienda">
+                        <mat-list>
+                            <mat-list-item>
+                                <span>Tienda:</span> {{tienda}}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <span>Sucursales:</span>
+                            </mat-list-item>
+                        </mat-list>
+                        <mat-list role="list" *ngFor="let item of sucursales">
+                            <mat-list-item role="listitem">
+                                <span>Direccion:</span> {{item.address}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <span>Tipo:</span> {{item.branchType}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <span>Teléfono:</span> {{item.phoneNumber}}</mat-list-item>
+                            <mat-divider></mat-divider>
+
+                        </mat-list>
+                    </mat-tab>
+                </mat-tab-group>
+
+            </div>
+        </div>
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button class="btn btn-danger" style="margin-right: 5px;" mat-dialog-close>Cerrar</button>
+        <button class="btn btn-success" (click)="reclamarPremio()">Actualizar Estatus</button>
+    </mat-dialog-actions>
+
+
+</ng-template>
+
+<!-- validar reclamar -->

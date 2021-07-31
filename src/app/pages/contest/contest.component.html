@@ -1,0 +1,229 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    Concursos con audio
+                </mat-card-title>
+                <table mat-table [dataSource]="contestList" *ngIf="contestList.length > 0">
+
+                    <ng-container matColumnDef="premio">
+                        <th mat-header-cell *matHeaderCellDef> Premio </th>
+                        <td mat-cell *matCellDef="let element"> {{element.promoContestResponse.namePromo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                        <td mat-cell *matCellDef="let element"> {{element.statusContest}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acrid">
+                        <th mat-header-cell *matHeaderCellDef> ACR ID </th>
+                        <td mat-cell *matCellDef="let element"> {{element.idAcr}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="release">
+                        <th mat-header-cell *matHeaderCellDef> Fecha de creación </th>
+                        <td mat-cell *matCellDef="let element"> {{element.releaseDate}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="update">
+                        <th mat-header-cell *matHeaderCellDef> Actualizar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="warn" [disabled]="element.statusContest !== 'Creado'" matTooltip="Escuchar y editar concurso" (click)="openDialogContest(element, contest)">
+                                <mat-icon class="mat-18 material-icons">edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lanzar">
+                        <th mat-header-cell *matHeaderCellDef> Notificar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="accent" [disabled]="element.statusContest !== 'Creado'" matTooltip="Notificar tickteo a los usuarios de la app." (click)="openDialogConfirm(element, confirmar)">
+                                    <mat-icon class="mat-18 material-icons">notifications</mat-icon>
+                                </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="end">
+                        <th mat-header-cell *matHeaderCellDef> Terminar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="info" [disabled]="element.statusContest == 'Terminado'" matTooltip="Terminar concurso." (click)="terminateConcurso(element, terminar)">
+                                    <mat-icon class="mat-18 material-icons">not_interested</mat-icon>
+                                </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div *ngIf="contestList.length === 0 && isLoaded == true" class="alert alert-empty" role="alert">
+                    No existen concursos!
+                </div>
+                <mat-paginator *ngIf="contestList.length > 0" #paginator [length]="totalLength" [pageIndex]="pageIndex" [pageSize]="limit" [pageSizeOptions]="pageLimit" (page)="changePage($event)">
+                </mat-paginator>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <!-- update contest modal -->
+    <ng-template #contest>
+        <h1 mat-dialog-title>{{title}}</h1>
+        <h5>Nombre del premio:
+            <b> {{namePremio}}</b>
+        </h5>
+        <br>
+
+        <div mat-dialog-content style="height: 260px;">
+
+            <div class="container-modal">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <span>Audio actual</span>
+                        <br>
+                        <audio id="audio_core2" width="300" height="32" src="{{urlAudios}}{{audioSrcActual}}" controls="controls" preload="">
+                        </audio>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12" *ngIf="reproductor">
+                        <span>Reproducir audio cargado</span>
+                        <br>
+                        <audio id="audio_core" width="300" height="32" src="{{audioSrc}}" controls="controls" preload="">
+                        </audio>
+                    </div>
+                </div>
+                <form [formGroup]="formUpload" class="example-form">
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="Nombre del audio" maxlength="400" formControlName="name" required>
+                        <mat-error *ngIf="formUpload.get('name').hasError('required')">
+                            El nombre del audio es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="row">
+                        <span style="margin-top: 10px" *ngIf="reproductor == false">
+                            Carga un nuevo spot de audio, si deseas cambiar el audio actual y presiona Actualizar
+                        </span>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="spot-add" matTooltip="Cargar nuevo spot de audio">
+                                <input type="file" formControlName="fileSelect" name="selectFile" id="imageUpload" style="display: none" accept="audio/*" (change)="onAudioFileChange($event)" name="updateFile" class="img-upload-btn" />
+                                <label class="label-edit" for="imageUpload">
+                                    <mat-icon class="icon-label">audiotrack</mat-icon>
+                                </label>
+                            </div>
+                            <br>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div>
+            <mat-dialog-actions align="end">
+                <button style="margin-right: 5px;" class="btn btn-danger" mat-dialog-close>Cancelar</button>
+                <button class="btn btn-success" (click)="updateAudio(formUpload)">Actualizar</button>
+            </mat-dialog-actions>
+
+        </div>
+
+    </ng-template>
+    <!-- update contest modal -->
+
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+
+<ng-template #spinner2>
+
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+    <h1 class="loading-indicator timer">
+        <mat-icon class="mat-18 material-icons">timer</mat-icon>{{transformsTime}}</h1>
+
+</ng-template>
+
+<!--confirmar modal -->
+<ng-template #confirmar>
+    <h1 mat-dialog-title>¿Deseas lanzar el premio <b>{{textNotfs}}</b>? </h1>
+    <mat-dialog-content>
+    <h5>Presiona aceptar si deseas notificar a los usuarios de la app que hay nuevos premios por tickteo</h5>
+
+    <h3 style="font-weight: bold">Premio: </h3>
+    <h4>{{namePremio}}</h4>
+
+    <form [formGroup]="formTime">
+        <mat-form-field style="padding-top: 8px">
+            <input readonly matInput placeholder="Segundos definidos al crear el premio + {{apiConf.segundosPlusAudio}} segundos extra." formControlName="time" required>
+            <mat-error *ngIf="formTime.get('time').hasError('required')">
+                El tiempo es requerido en segundos
+            </mat-error>
+            <mat-error *ngIf="formTime.get('time').hasError('pattern')">
+                Solo se permiten números enteros
+            </mat-error>
+            <mat-error *ngIf="formTime.get('time').hasError('max')">
+                El limite máximo es: {{apiConf.tiempoSegundos}} segundos
+            </mat-error>
+        </mat-form-field>
+    </form>
+    <br>
+    <mat-checkbox (change)="changeCheck($event)" [checked]="checked"><span id="textSelect">Todos los usuarios</span></mat-checkbox>
+    
+    <form>
+        <mat-form-field  *ngIf="!checked">
+
+            <input matInput type="text" id="filterPlaces" placeholder="Buscar ubicación más cercana">
+
+        </mat-form-field>
+    </form>
+    <div mat-dialog-content *ngIf="!checked">
+
+       
+        <div class="container-modal">
+            <div>
+                <h4>Radio:
+                    <b>{{kilometers}}</b> KM</h4>
+            </div>
+            <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                <agm-circle [latitude]="latitude" (dragEnd)="markerDragEnd($event)" (radiusChange)="onRadiusChange($event)" [longitude]="longitude" [radius]="radius" [fillColor]="'orange'" [circleDraggable]="true" [editable]="true">
+                </agm-circle>
+            </agm-map>
+
+           
+        </div>
+    </div>
+    <!-- <span>*Nota: Una vez que presionaste aceptar y se notifico a los usuarios comienza un temporizador y se cambia el estatus del concurso.</span> -->
+</mat-dialog-content>
+    <div>
+        <mat-dialog-actions align="end">
+            <button style="margin-right: 5px;" class="btn btn-danger" mat-dialog-close>Cancelar</button>
+            <button class="btn btn-success" (click)="notificateUsers()">Aceptar</button>
+        </mat-dialog-actions>
+    </div>
+
+</ng-template>
+<!-- confirmar modal -->
+
+<!--confirmar modal -->
+<ng-template #terminar>
+    <h1 mat-dialog-title>¿Deseas terminar el concurso?</h1>
+
+    <h3 style="font-weight: bold">Premio: </h3>
+    <h4>{{namePremio}}</h4>
+
+    <!-- <span>*Nota: Una vez que presionaste aceptar y se notifico a los usuarios comienza un temporizador y se cambia el estatus del concurso.</span> -->
+    <div>
+        <mat-dialog-actions align="end">
+            <button style="margin-right: 5px;" class="btn btn-danger" mat-dialog-close>Cancelar</button>
+            <button class="btn btn-success" (click)="terminateContestAndNotificateWinner()">Aceptar</button>
+        </mat-dialog-actions>
+    </div>
+
+</ng-template>
+<!-- confirmar modal -->

@@ -1,0 +1,140 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content id="title">
+                <mat-card-title>
+                    Lista de premios por comercio
+                </mat-card-title>
+
+                <form>
+                    <mat-form-field>
+                        <mat-label>Selecciona el comercio para ver sus premios activos</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let commerce of comercios" [value]="commerce.shopName"
+                                (click)="getAwarsActives(commerce.idShop, 0, 4)">
+                                {{commerce.shopName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+
+
+                <div class="row">
+
+                    <div class="col-md-6 col-sm-12" *ngFor="let promo of premios">
+                        <mat-card class="card-promos">
+                            <mat-card-header>
+                                <mat-card-title>{{promo.name}}</mat-card-title>
+                            </mat-card-header>
+                            <div style="text-align: center;">
+                                <img class="size-img" style="cursor: pointer;"
+                                    (click)="openImage(imageModal, promo.image)" mat-card-image
+                                    src="{{serverImages}}{{promo.image}}" alt="Image Premio">
+                            </div>
+                            <mat-card-actions style="text-align: right">
+                                <button mat-icon-button color="primary" matTooltip="Subir Spot"
+                                    (click)="openDialogUpload(promo, upload)">
+                                    <mat-icon class="mat-18 material-icons color_edit">cloud_upload</mat-icon>
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                </div>
+                <div *ngIf="comercios.length == 0 && isLoaded" class="alert alert-empty" role="alert">
+                    No existen comercios activos, o no se han verificado los contratos!
+                </div>
+                <div *ngIf="premios.length == 0 && selectedCommerce" class="alert alert-empty" role="alert">
+                    El comercio no tiene premios activos!
+                </div>
+                <mat-paginator #paginator *ngIf="premios.length > 0 && selectedCommerce" [length]="totalLength"
+                    [pageSize]="limit" [pageSizeOptions]="pageLimit" (page)="changePage($event)">
+                </mat-paginator>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+<!-- open image modal -->
+<ng-template #imageModal>
+    <h1 mat-dialog-title>Imagen previa</h1>
+    <div mat-dialog-content>
+        <img src="{{serverImages}}{{imagePremio}}" alt="premio" width="600">
+
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+
+
+</ng-template>
+
+<!-- ////open image modal -->
+
+<!-- upload audio -->
+<ng-template #upload>
+    <h1 mat-dialog-title>Agregar Spot de audio a un premio</h1>
+    <h5>Nombre del premio:
+        <b> {{namePremio}}</b>
+    </h5>
+    <br>
+    <div mat-dialog-content>
+
+        <div class="container-modal">
+            <form [formGroup]="formUpload" class="example-form">
+                <mat-form-field>
+                    <input matInput placeholder="Nombre del audio" maxlength="400" formControlName="name" required>
+                    <mat-error *ngIf="formUpload.get('name').hasError('required')">
+                        El nombre del audio es requerido.
+                    </mat-error>
+                </mat-form-field>
+                <div class="row">
+                    <br>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="spot-add" matTooltip="Cargar spot de audio">
+                            <input type="file" formControlName="fileSelect" name="selectFile" id="imageUpload"
+                                style="display: none" required accept="audio/*" (change)="onAudioFileChange($event)"
+                                name="updateFile" class="img-upload-btn" />
+                            <label class="label-edit" for="imageUpload">
+                                <mat-icon class="icon-label">audiotrack</mat-icon>
+                            </label>
+                        </div>
+                        <mat-error style="padding-top: 10%;" *ngIf="formUpload.get('fileSelect').hasError('required')">
+                            El spot de audio es requerido.
+                        </mat-error>
+                    </div>
+                </div>
+
+            </form>
+            <div class="row" style="text-align: center" *ngIf="reproductor">
+                <div class="col-12">
+                    <span>Reproducir audio cargado</span>
+                </div>
+                <div class="col-12">
+
+                    <audio id="audio_core" width="300" height="32" src="{{audioSrc}}" controls="controls" preload="">
+                    </audio>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div>
+        <mat-dialog-actions align="end">
+            <button style="margin-right: 5px;" class="btn btn-danger" mat-dialog-close>Cancelar</button>
+            <button class="btn btn-success" (click)="uploadAudio(formUpload)">Subir</button>
+        </mat-dialog-actions>
+
+    </div>
+
+</ng-template>
+
+
+<!-- upload audio -->

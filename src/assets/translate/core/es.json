@@ -1,0 +1,10 @@
+{
+    "LOGIN": {
+        "EMAIL": "Correo electrónico",
+        "PASSWORD": "Contraseña",
+        "LOGIN": "Iniciar sesión"
+    },
+    "HOME": {
+        "TITLE": "Hola Angular"
+    }
+}

@@ -1,0 +1,107 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    Contratar radiodifusoras para el comercio: {{shop}}
+                </mat-card-title>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Todas las radiodifusoras: </label>
+                        <span style="color: blue"> ({{broadcaster.length}})</span>
+                        <div class="listaRelaciones">
+                            <div *ngIf="broadcaster.length == 0 && isLoaded" class="alert alerts-empty" role="alert">
+                                No existen Radiodifusoras o estan inactivas, (contacta al administrador del sistema).
+                                <br>
+                            </div>
+                            <div class="list-group list-group-flush " *ngFor="let radio of broadcaster; let i = index">
+                                <span class="list-group-item list-group-item-action">
+                                    <i> {{radio.name }}
+                                        <span class="go" (click)="openDialogAddRadio(radio, addRadio)">
+                                            <mat-icon class="mat-18 material-icons color_green">arrow_forward_ios
+                                            </mat-icon>
+                                        </span>
+                                </i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Mis radiodifusoras contratadas: </label>
+                        <span style="color: blue"> ({{relationBroadcasterShop.length}})</span>
+                        <div class="listaRelaciones">
+                            <div *ngIf="relationBroadcasterShop.length == 0 && isLoaded && broadcaster.length > 0" class="alert-broad" role="alert">
+                                Presiona la flecha verde, para agregar radiodifusoras que tengan contrato con tu comercio
+                                <br>
+                            </div>
+                            <div class="list-group list-group-flush " *ngFor="let relation of relationBroadcasterShop; let i = index">
+                                <span class="list-group-item list-group-item-action">
+                                    <i> {{relation.nameBroadcaster }}
+                                        <span class="close" (click)="openDialogDeleteRelation(relation, deleteR)">&times;</span>
+                                </i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+<!-- contratar radiodifusora -->
+<ng-template #addRadio>
+    <h1 mat-dialog-title>¿Deseas agregar la radiodifusora: <span style="color: #ff8a00;">{{nameBroadcaster}}</span> a mis contratadas? </h1>
+    <div mat-dialog-content>
+
+        <div class="container-modal">
+            <div class="row">
+            </div>
+            <br>
+        </div>
+
+
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button type="button" style="margin-right: 5px;" mat-dialog-close class="btn btn-danger">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="addRelationBroadctasterShop()">Agregar</button>
+    </mat-dialog-actions>
+
+
+</ng-template>
+
+<!-- contratar radiodifusora -->
+
+
+<!-- ELIMINA radiodifusora -->
+<ng-template #deleteR>
+    <h1 mat-dialog-title>¿Deseas quitar la radiodifusora: <span style="color: #ff8a00;">{{nameBroadcaster}}</span> de mis contratadas? </h1>
+    <div mat-dialog-content>
+
+        <div class="container-modal">
+            <div class="row">
+            </div>
+            <br>
+        </div>
+
+
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button type="button" style="margin-right: 5px;" mat-dialog-close class="btn btn-danger">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="deleteRelation()">Eliminar</button>
+    </mat-dialog-actions>
+
+
+</ng-template>
+
+<!-- ELIMINA radiodifusora -->

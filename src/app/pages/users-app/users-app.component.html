@@ -1,0 +1,61 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    Lista de usuarios de la aplicación
+                    <div></div>
+                </mat-card-title>
+                <mat-form-field *ngIf="filterData.length > 0">
+                    <input matInput id="search" (keyup)="searchUsers($event.target.value)" placeholder="Buscar...">
+                </mat-form-field>
+                <table mat-table [dataSource]="users" *ngIf="users.length > 0">
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Nombre y apellidos </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} {{element.lastName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef> Email </th>
+                        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="active">
+                        <th mat-header-cell *matHeaderCellDef> Activo </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox id="{{element.id_shop}}" [checked]="element.active" (change)="changeStatusActive($event, element.idUser)"></mat-checkbox>
+                        </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef> Tipo de cuenta </th>
+                        <td mat-cell *matCellDef="let element"> {{element.accountType}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="phone">
+                        <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+                        <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div *ngIf="users.length === 0 && isLoaded == true" class="alert alert-empty" role="alert">
+                    No existen usuarios de la aplicación!
+                </div>
+                <mat-paginator *ngIf="users.length > 0" #paginator [length]="totalLength" [pageIndex]="pageIndex" [pageSize]="limit" [pageSizeOptions]="pageLimit" (page)="changePage($event)">
+                </mat-paginator>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>

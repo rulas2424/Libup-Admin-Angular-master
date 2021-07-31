@@ -1,0 +1,303 @@
+.avatar-edit {
+    position: absolute;
+    right: 12px;
+    z-index: 1;
+    top: 10px;    
+    }
+  
+    .label-edit{
+        display: inline-block;
+            width: 34px;
+            height: 34px;
+            margin-bottom: 0;
+            border-radius: 100%;
+            background: #f9efd3;
+            border: 1px solid transparent;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+            font-weight: normal;
+            transition: all .2s ease-in-out;
+    }
+  
+    .label-edit:hover{
+        background: #e6f83f;
+        border-color: #d6d6d6;
+    }
+  
+    .icon-label{
+        position: absolute;
+        top: 5px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin: auto;
+    }
+
+    .container-modal {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .container-modal > * {
+        width: 100%;
+      }
+      ::-webkit-scrollbar {
+        width: 0px;  /* remove scrollbar space */
+        background: transparent;  /* optional: just make scrollbar invisible */
+    }
+    
+
+/* chat */
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #e0e0e0; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+ 
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+ 
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+ 
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: black;
+    font-weight: bold;
+}
+ 
+
+.sidenav .closebtn:hover {
+    color: rgba(218, 123, 0, 0.295);
+    font-weight: bold;
+}
+ 
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+    overflow:hidden;
+    width:100%;
+}
+body {
+  overflow-x: hidden;
+}
+ 
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #3330;
+    overflow: hidden;
+}
+ 
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+ 
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+ 
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+ 
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+ 
+a svg{
+  transition:all .5s ease;
+
+}
+ 
+#ico{
+  display: none;
+}
+ 
+.menu{
+  background: #000;
+  display: none;
+  padding: 5px;
+  width: 320px;
+  
+}
+
+.sidenav {
+    transition: 0s; 
+}
+ 
+#main {
+    transition: margin-left 0s;
+}
+
+.btnCollapse{
+    width: 90%;
+    background-color: #afa4a4 !important;
+    font-size: large;
+}
+
+
+.listStyles{
+    cursor: pointer;
+    background: #53738a0f !important;
+    color: #000000 !important;
+    font-size: larger !important;
+}
+
+
+.listStylesAcitive{
+    cursor: pointer; background: #b8bdb7 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.listStyles:hover{
+    cursor: pointer; background: #929292 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.listaConversations{
+    height: 500px !important;  overflow-y: scroll; background: #ababab0f; margin-top: 12px; scrollbar-width: none;
+  }
+
+
+
+  /* css chat */
+  ::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+
+  .textConv{
+    font-size: x-large;
+    vertical-align: middle;
+    font-weight: bold;
+  }
+
+
+
+  .divs {
+    position: relative;
+    display: inline-block;
+    background-color: #e0e0e000;
+    color: #f3f1b0;
+    font-size: inherit;
+    right: 25px;
+    float: right;
+}
+
+
+.inputs {
+    position:absolute;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    background: #00f;
+    z-index:999;
+}
+
+.icons {
+    position:relative;
+}
+
+.modal-dialog {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+  
+  .modal-content {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .full_modal-dialog {
+    width: 98% !important;
+    height: 92% !important;
+    min-width: 98% !important;
+    min-height: 92% !important;
+    max-width: 98% !important;
+    max-height: 92% !important;
+    padding: 0 !important;
+  }
+  
+  .full_modal-content {
+    height: 99% !important;
+    min-height: 99% !important;
+    max-height: 99% !important;
+  }
+
+  .modal-backdrop {
+    background-color: rgba(0,0,0,.0001) !important;
+}
+
+.imgbox {
+    display: grid;
+    height: 100%;
+}
+.center-fit {
+    max-width: 100%;
+    max-height: 100vh;
+    margin: auto;
+}
+
+.soporteText{
+    word-break: break-all;
+    word-wrap: break-word;
+    float: left;
+    width: fit-content;
+}
+
+.normalText{
+    word-break: break-all;
+    word-wrap: break-word;
+    float: right;
+    width: fit-content;
+}
+
+
+.card-footer{
+    padding: 0.75rem 0.25rem;
+    border-radius: 0 0 15px 15px !important;
+        border-top: 0 !important;
+}
+  /* css chat */
+/* chat */

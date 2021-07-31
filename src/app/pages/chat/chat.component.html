@@ -1,0 +1,170 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <!-- chat modal -->
+        <div class="col-12">
+
+            <div class="top_menu" style="margin-top: 12px; overflow-y:auto;">
+
+                <div class="title">
+                    Chat del canal: <span style="color: #277916;">{{canal}}</span>
+                    <form [formGroup]="myForm" style="float: right; padding-right: 40px;">
+                        <div>
+                            <div *ngIf="allMessages == true && connected == true" class="divs" style="cursor: pointer !important;">
+                                <input type="file" style="cursor: pointer !important;" accept="image/png,image/jpg,image/jpeg" formControlName="fileSelect" id="fileSelect" name="fileSelect" (ngModelChange)="onImageChange()" class="inputs" />
+                                <mat-icon style="cursor: pointer !important;" matBadgePosition="above after">
+                                    add_photo_alternate</mat-icon>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+
+            <ul class="messages" id="msg">
+                <!--se obtiene n todos los mnsajes cuando se inicia-->
+                <li id="idListaChat" *ngFor="let item of messages">
+                    <!--usuario de pannel-->
+                    <div class="row" *ngIf="item.typeUser == 'Panel'">
+
+                        <div class="col-12">
+
+                            <i class="circle-iconSoporte" style="float: left;" aria-hidden="true">
+                                <mat-icon matBadgePosition="above after" style="float: right; ">forum</mat-icon>
+                            </i>
+                            <span class="spanTextoUser">{{item.nameAdmin}} {{item.dateHour}}
+                                <b style="font-weight: bold">(Radio)</b>
+                            </span>
+                            <br>
+
+                            <b class="usuarioSoporte soporteText" *ngIf="item.message != null">{{item.message}}</b>
+                            <img style="cursor: pointer;" *ngIf="item.message == null && item.msgType == 'Imagen'" class="usuarioSoporte" id="myImg" (click)="openImageModal(item.pathFile, imageChat)" src="{{serverAdjuntos}}{{item.pathFile}}" alt="CHAT AD" height="200" />
+
+
+                            <video *ngIf="item.message == null && item.msgType == 'Video'" class="usuarioSoporte" width="500" height="500" controls>
+                                    <source src="{{serverAdjuntos}}{{item.pathFile}}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                  </video>
+
+
+
+                        </div>
+                    </div>
+
+                    <!--usuario de appp-->
+                    <div class="row" *ngIf="item.typeUser == 'App'">
+
+                        <div class="col-12">
+                            <i class="circle-iconChat" style="float: right;" aria-hidden="true">
+                                <mat-icon matBadgePosition="above after" style="float: right; ">forum</mat-icon>
+                            </i>
+                            <span class="spanTextoUserChat" style="float: right;">{{item.nameUser}} {{item.dateHour}}
+                            </span>
+                            <br>
+                            <b class="usuarioNormal normalText" *ngIf="item.message != null">{{item.message}}</b>
+                            <img class="usuarioNormal" style="cursor: pointer;" id="myImg" *ngIf="item.message == null && item.msgType == 'Imagen'" (click)="openImageModal(item.pathFile, imageChat)" src="{{serverAdjuntos}}{{item.pathFile}}" alt="CHAT AD" height="200">
+
+                            <video class="usuarioNormal" *ngIf="item.message == null && item.msgType == 'Video'" class="usuarioSoporte" width="500" height="500" controls>
+                                <source src="{{serverAdjuntos}}{{item.pathFile}}" type="video/mp4">
+                                Your browser does not support the video tag.
+                              </video>
+
+                        </div>
+                    </div>
+                    <br>
+                </li>
+
+            </ul>
+            <div class="card-footer" style="background-color: #faebd700;">
+
+                <div style="text-align: center;" *ngIf="allMessages == false && connected == false">
+                    <div class="spinner-grow text-primary" role="status">
+                    </div>
+                    <div class="spinner-grow text-secondary" role="status">
+                    </div>
+                    <div class="spinner-grow text-success" role="status">
+                    </div>
+                    <div class="spinner-grow text-danger" role="status">
+                    </div>
+                    <div class="spinner-grow text-warning" role="status">
+                    </div>
+                    <div class="spinner-grow text-info" role="status">
+                    </div>
+                    <div class="spinner-grow text-dark" role="status">
+                    </div>
+                    <h3>Obteniendo mensajes...</h3>
+                </div>
+                <form class="example-form" *ngIf="allMessages == true && connected == true">
+                    <mat-form-field class="example-full-width">
+                        <textarea style="resize: none;" matInput maxlength="180" id="inputConver" #inputConver (keyup.enter)="sendMessage(inputConver.value, $event)" class=" type_msg" placeholder="Escribe tu mensaje aqui..."></textarea>
+                    </mat-form-field>
+                </form>
+                <!--  <div class="input-group-append">
+                  <button (click)="sendMessage(inputConver.value, $event)" class="input-group-text send_btn" style="background: #85ef5b;"><i class="fa fa-angle-right" style="font-weight: bold;
+                    font-size: -webkit-xxx-large;
+                    color: black;"></i></button>
+                </div>
+ -->
+            </div>
+
+        </div>
+        <!-- cchat modal -->
+    </div>
+
+
+    <!-- open image chat -->
+    <ng-template #imageChat>
+        <h1 mat-dialog-title>Imagen previa</h1>
+        <div mat-dialog-content>
+            <img src="{{serverAdjuntos}}{{chatImage}}" alt="chat" width="600">
+
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- open image chat -->
+
+
+    <!-- open video chat send -->
+    <ng-template #videoPrevio>
+        <h1 mat-dialog-title>Vista previa del video</h1>
+        <div mat-dialog-content style=" text-align: center;">
+            <video width="500" height="500" controls>
+                <source src="{{videoLoad}}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button style="margin-right: 5px;" class="btn btn-danger" mat-dialog-close>Cerrar</button>
+            <button class="btn btn-success" mat-dialog-close (click)="sendVideo()">Enviar</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- open video chat send -->
+
+    <!-- open image chat -->
+    <ng-template #imagePrevio>
+        <h1 mat-dialog-title>Vista previa de la imagen</h1>
+        <div mat-dialog-content>
+            <img src="{{imageLoad}}" alt="chat" width="600">
+
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button style="margin-right: 5px;" class="btn btn-danger" mat-dialog-close>Cerrar</button>
+            <button class="btn btn-success" mat-dialog-close (click)="uploadImage()">Enviar</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- open image chat -->

@@ -1,0 +1,12 @@
+
+  p{
+    font-size: medium;
+    text-align: justify
+  }
+
+  .mat-icon-button:hover {
+    background-color: #2c2317 !important;
+  }
+  .mat-button:hover {
+    background-color: #f7f7f3 !important;
+  }

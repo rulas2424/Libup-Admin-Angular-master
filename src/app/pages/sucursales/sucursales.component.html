@@ -1,0 +1,550 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    <span style="float: left;"> Sucursales del comercio: <span
+                            class="name-commerce">{{ nameCommerce}}</span></span>
+                    <button matTooltip="Agregar una sucursal" class="button-add" (click)="openDialogAddSucursal(branch)" mat-raised-button color="accent">
+                        <mat-icon class="color_amar">add_box</mat-icon> Agregar
+                    </button>
+
+                </mat-card-title>
+                <mat-form-field *ngIf="filterData.length > 0">
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar sucursal por dirección...">
+                </mat-form-field>
+
+                <table *ngIf="sucursales.length > 0" mat-table [dataSource]="sucursales" class="mat-elevation-z8">
+
+                    <ng-container matColumnDef="direccion">
+                        <th mat-header-cell *matHeaderCellDef> Dirección </th>
+                        <td mat-cell *matCellDef="let element"> {{element.branches.address}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="telefono">
+                        <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+                        <td mat-cell *matCellDef="let element"> {{element.branches.phoneNumber}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.branches.type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="active">
+                        <th mat-header-cell *matHeaderCellDef> Activo </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox [checked]="element.branches.active" (change)="changeStatusActive($event, element.branches)"></mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="editar">
+                        <th mat-header-cell *matHeaderCellDef> Actualizar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button matTooltip="Editar" color="accent" (click)="openDialogUpdate(element, branch)">
+                                <mat-icon class="mat-18 material-icons color_blue">edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="horario">
+                        <th mat-header-cell *matHeaderCellDef> Horarios </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="accent" matTooltip="Ver y agregar horarios" (click)="openDialogHorarios(horarios, element.branches)">
+                                <mat-icon class="mat-18 material-icons color_horarios"
+                                    matBadge="{{element.branches.shedules.length}}" matBadgeColor="primary">access_time
+                                </mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete">
+                        <th mat-header-cell *matHeaderCellDef> Eliminar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button matTooltip="Editar" color="accent" (click)="openDialogDelete(element.branches, deleteR)">
+                                <mat-icon class="mat-18 material-icons color_red">delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div *ngIf="sucursales.length === 0 && isLoaded == true" class="alert alert-empty" role="alert">
+                    El comercio, no tiene sucursales!
+                </div>
+            </mat-card-content>
+
+
+        </mat-card>
+
+
+    </div>
+</div>
+<!-- add bbrabch modal -->
+<div class="container-fluid">
+
+    <ng-template #branch>
+        <h1 mat-dialog-title>{{title}}</h1>
+        <form [formGroup]="formSucursal" (ngSubmit)="addSucursal()" novalidate>
+            <div mat-dialog-content>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <mat-form-field>
+                            <input matInput placeholder="Dirección física" maxlength="110" formControlName="address" required>
+                            <mat-error *ngIf="formSucursal.get('address').hasError('required')">
+                                La dirección es requerida.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 margin-div-input">
+                        <mat-form-field>
+                            <input matInput type="text" maxlength="10" placeholder="Teléfono" formControlName="phoneNumber">
+                            <mat-error *ngIf="formSucursal.get('phoneNumber').hasError('required')">
+                                El teléfono es requerido.
+                            </mat-error>
+
+                            <mat-error *ngIf="formSucursal.get('phoneNumber').hasError('pattern')">
+                                Solo se permiten números
+                            </mat-error>
+
+                            <mat-error *ngIf="formSucursal.get('phoneNumber').hasError('minlength')">
+                                La longitud minima es de 10 caracteres
+                            </mat-error>
+
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 margin-div-input">
+                        <mat-form-field>
+                            <mat-label>Tipo de sucursal</mat-label>
+                            <mat-select formControlName="branchType" required>
+                                <mat-option *ngFor="let branch of branchTypes" [value]="branch.value">
+                                    {{branch.type}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formSucursal.get('branchType').hasError('required')">
+                                El tipo de sucursal es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-12 col-md-4 margin-div-input">
+                        <mat-form-field>
+                            <mat-label>Estado</mat-label>
+                            <mat-select formControlName="estados" required>
+                                <mat-option *ngFor="let est of estados" [value]="est.idState">
+                                    {{est.state}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formSucursal.get('estados').hasError('required')">
+                                El estado es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+              
+                    <div class="col-12 margin-div-input">
+                        <mat-form-field>
+
+                            <input matInput type="text" id="filterPlaces" placeholder="Buscar ubicación en el mapa">
+
+                        </mat-form-field>
+                        <div>
+                            <h5>Dirección: {{address}}</h5>
+                        </div>
+                        <span style="color: orange; font-size: small;">Mueve el pin rojo para definir exactamente tu ubicación</span>
+                        <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                            <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
+                        </agm-map>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <mat-dialog-actions align="end">
+                <button type="button" style="margin-right: 5px;" mat-dialog-close class="btn btn-danger">Cancelar</button>
+                <button class="btn btn-success" type="submit">{{buttonAdd}}</button>
+            </mat-dialog-actions>
+        </form>
+    </ng-template>
+
+</div>
+<!-- ////add branch modal -->
+
+<!-- horarios modal -->
+<div class="container-fluid">
+
+    <ng-template #horarios>
+        <h1 mat-dialog-title>Horarios de la sucursal: </h1> <span>{{addressName}}</span>
+
+        <div mat-dialog-content>
+            <div class="row">
+                <div class="col-12">
+                    <button style="float: right" mat-icon-button matTooltip="Editar horario" color="accent" (click)="openAddHorarios(addHours)">
+                        <mat-icon class="material-icons color_hour" matBadgeColor="primary">edit
+                        </mat-icon>
+                    </button>
+
+                </div>
+                <div *ngIf="sheduleList.length === 0" class="alert alert-warning" role="alert">
+                    La sucursal no tiene asignados horarios, presiona el botón de editar para agregar.
+                </div>
+            </div>
+            <div class="row" *ngIf="sheduleList.length > 0">
+                <div class="col-md-1 col-sm-12">
+                    <mat-icon class="mat-18 material-icons color_horarios" matBadgeColor="primary">access_time
+                    </mat-icon>
+                </div>
+
+                <div class="col-md-11 col-sm-12">
+                    <div class="IiXf4c " *ngFor="let schedule of sheduleList"><span class="h0eIxc">{{schedule.day}}</span><span class="VZrBSc" *ngIf="schedule.isClosed == true">{{schedule.hourOpen}}–{{schedule.hourClose}}</span> <span class="VZrBSc" *ngIf="schedule.isClosed == false">Cerrado</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <mat-dialog-actions align="end">
+            <button type="button" class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+        </mat-dialog-actions>
+    </ng-template>
+
+</div>
+<!-- ////horarios modal -->
+
+
+<!-- SCHEDULES modal -->
+<div class="container-fluid">
+
+    <ng-template #addHours>
+        <h1 mat-dialog-title>Horario de atención: </h1>
+        <span>{{addressName}}</span>
+        <form [formGroup]="formHours" (ngSubmit)="addSchedule()" novalidate>
+
+            <div mat-dialog-content>
+                <br>
+
+                <div class="col-12">
+                    <!-- Lunes -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Lunes</span>
+                                <mat-slide-toggle id="slideLunes" (change)="changeSlide($event)" formControlName="switchLunes"><span id="textLunes">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="lunes == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="lunesOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('lunesOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="lunes == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="lunesClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('lunesClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('lunesOpen').hasError('pattern') || formHours.get('lunesClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+
+                    <!-- Martes -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Martes</span>
+                                <mat-slide-toggle id="slideMartes" (change)="changeSlide($event)" formControlName="switchMartes"><span id="textMartes">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="martes == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="martesOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('martesOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="martes == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="martesClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('martesClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('martesOpen').hasError('pattern') || formHours.get('martesClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+
+                    <!-- Miercoles -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Miercoles</span>
+                                <mat-slide-toggle id="slideMiercoles" (change)="changeSlide($event)" formControlName="switchMiercoles"><span id="textMiercoles">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="miercoles == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="miercolesOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('miercolesOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="miercoles == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="miercolesClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('miercolesClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('miercolesOpen').hasError('pattern') || formHours.get('miercolesClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+
+                    <!-- Jueves -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Jueves</span>
+                                <mat-slide-toggle id="slideJueves" (change)="changeSlide($event)" formControlName="switchJueves"><span id="textJueves">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="jueves == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="juevesOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('juevesOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="jueves == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="juevesClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('juevesClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('juevesOpen').hasError('pattern') || formHours.get('juevesClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+
+                    <!-- Viernes -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Viernes</span>
+                                <mat-slide-toggle id="slideViernes" (change)="changeSlide($event)" formControlName="switchViernes"><span id="textViernes">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="viernes == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="viernesOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('viernesOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="viernes == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="viernesClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('viernesClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('viernesOpen').hasError('pattern') || formHours.get('viernesClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+
+                    <!-- Sabado -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Sabado</span>
+                                <mat-slide-toggle id="slideSabado" (change)="changeSlide($event)" formControlName="switchSabado"><span id="textSabado">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="sabado == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="sabadoOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('sabadoOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="sabado == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="sabadoClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('sabadoClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('sabadoOpen').hasError('pattern') || formHours.get('sabadoClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+
+                    <!-- Domingo -->
+                    <div class="row rows-days">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="IiXf4c"><span class="h0eIxc">Domingo</span>
+                                <mat-slide-toggle id="slideDomingo" (change)="changeSlide($event)" formControlName="switchDomingo"><span id="textDomingo">Cerrado</span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="domingo == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Abre a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="domingoOpen">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('domingoOpen').hasError('required')">
+                                    Hora de apertura es requerido.
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-6" *ngIf="domingo == true">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" placeholder="Cierra a la (s)" (click)="cleanSchedules($event.target.value)" (keyup)="searchSchedules($event.target.value)" aria-label="Number" matInput [matAutocomplete]="auto" formControlName="domingoClose">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let hour of schedules" [value]="hour">
+                                        {{hour}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formHours.get('domingoClose').hasError('required')">
+                                    Hora de cierre es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="mat-error" *ngIf="formHours.get('domingoOpen').hasError('pattern') || formHours.get('domingoClose').hasError('pattern')">
+                            Ingresa una hora válida, por ejemplo: "14:45".
+                        </mat-error>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <mat-dialog-actions align="end">
+                <button mat-button mat-dialog-close>Cerrar</button>
+                <button mat-button type="submit">Aplicar</button>
+            </mat-dialog-actions>
+        </form>
+    </ng-template>
+
+</div>
+<!-- ////SCHEDULES modal -->
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+<ng-template #deleteR>
+    <h1 mat-dialog-title>¿Deseas eliminar la sucursal: <span style="color: #ff8a00;">{{sucursal}}</span>? </h1>
+    <div mat-dialog-content>
+
+        <div class="container-modal">
+            <div class="row">
+            </div>
+            <br>
+        </div>
+
+
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button type="button" style="margin-right: 5px;" mat-dialog-close class="btn btn-danger">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="deleteBranch()">Eliminar</button>
+    </mat-dialog-actions>
+
+
+</ng-template>

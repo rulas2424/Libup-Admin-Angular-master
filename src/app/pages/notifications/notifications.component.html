@@ -1,0 +1,141 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content id="title">
+                <mat-card-title>
+                    Módulo de notificaciones
+                </mat-card-title>
+
+                <div class="row">
+                    <div class="col-12">
+                        <mat-tab-group (selectedTabChange)="selectedTab($event)">
+                            <mat-tab label="Promoción">
+                                <div class="col-sm-12 tabs-actives">
+                                    <span *ngIf="premios.length > 0 && isLoaded">Promociones activas del comercio:
+                                        <b>{{commerceName}}</b>
+                                    </span>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Descuento">
+                                <div class="col-sm-12 tabs-actives">
+                                    <span *ngIf="premios.length > 0 && isLoaded">Descuentos activos del comercio:
+                                        <b>{{commerceName}}</b>
+                                    </span>
+
+                                </div>
+
+                            </mat-tab>
+                           <!--  <mat-tab label="Premios directos">
+                                <div class="col-sm-12 tabs-actives">
+                                    <span *ngIf="premios.length > 0 && isLoaded">Premios activos del comercio:
+                                        <b>{{commerceName}}</b>
+                                    </span>
+                                </div>
+                            </mat-tab> -->
+                        </mat-tab-group>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-sm-12" *ngFor="let promo of premios">
+                        <mat-card class="card-promos">
+                            <mat-card-header>
+                                <mat-card-title>{{promo.name}}</mat-card-title>
+                            </mat-card-header>
+                            <div style="text-align: center;">
+                                <img class="size-img" style="cursor: pointer;" (click)="openImage(imageModal, promo.image)" mat-card-image src="{{serverImages}}{{promo.image}}" alt="Image Premio">                    
+                            </div>
+                            <mat-card-actions style="text-align: right">
+                                <button mat-icon-button color="primary" matTooltip="Enviar notificaciones" (click)="openDialogNotfs(promo, send)">
+                                    <mat-icon class="mat-18 material-icons color_edit">notification_important</mat-icon>
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                </div>
+                <div *ngIf="premios.length == 0 && isLoaded" class="alert alerts-empty" role="alert">
+                    El comercio:
+                    <b>{{commerceName}}</b> no tiene {{textError}} ! <button type="button" (click)="redirect()" style="float: right" class="btn btn-secondary">Agregar</button>
+                </div>
+                <mat-paginator #paginator [length]="totalLength" [pageSize]="limit" [pageSizeOptions]="pageLimit" (page)="changePage($event)">
+                </mat-paginator>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+<!-- open image modal -->
+<ng-template #imageModal>
+    <h1 mat-dialog-title>Imagen previa</h1>
+    <div mat-dialog-content>
+        <img src="{{serverImages}}{{imagePremio}}" alt="premio" width="600">
+
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+
+
+</ng-template>
+
+<!-- ////open image modal -->
+
+<!-- send notifications -->
+<ng-template #send>
+    <h1 mat-dialog-title>Enviar notificaciones de {{type}} <b>{{textNotfs}}</b></h1>
+    <h5>
+        <b> {{namePremio}}</b>
+    </h5>
+    <form>
+        <br>
+        <mat-form-field  *ngIf="!checked">
+
+            <input matInput type="text" id="filterPlaces" placeholder="Buscar ubicación más cercana">
+
+        </mat-form-field>
+    </form>
+    <br>
+    <mat-checkbox (change)="changeCheck($event)" [checked]="checked"><span id="textSelect">Todos los usuarios</span></mat-checkbox>
+    <br>
+    <mat-checkbox [disabled]="true" (change)="changeCheckNotificate($event)" *ngIf="isPremio" [checked]="checkedNotificate"><span>Notificar Ganador</span></mat-checkbox>
+    <div mat-dialog-content *ngIf="!checked">
+
+
+        <div class="container-modal">
+            <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                <agm-circle [latitude]="latitude" (dragEnd)="markerDragEnd($event)" (radiusChange)="onRadiusChange($event)" [longitude]="longitude" [radius]="radius" [fillColor]="'orange'" [circleDraggable]="true" [editable]="true">
+                </agm-circle>
+            </agm-map>
+
+            <div>
+                <h4>Radio:
+                    <b>{{kilometers}}</b> KM</h4>
+            </div>
+        </div>
+    </div>
+    <div>
+        <mat-dialog-actions align="end">
+            <button class="btn btn-danger" style="margin-right: 5px;" mat-dialog-close>Cancelar</button>
+            <button class="btn btn-success" (click)="sendNotifications()">Enviar Notificacion</button>
+        </mat-dialog-actions>
+
+    </div>
+
+</ng-template>
+
+
+<!-- send notifications -->
+
+
+<!-- open iframe -->
+
+
+<!-- open iframe -->

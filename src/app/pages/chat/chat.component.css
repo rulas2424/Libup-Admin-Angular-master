@@ -1,0 +1,106 @@
+/* css chat */
+
+ ::-webkit-scrollbar {
+    width: 0px;
+    /* remove scrollbar space */
+    background: transparent;
+    /* optional: just make scrollbar invisible */
+}
+
+.textConv {
+    font-size: x-large;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.divs {
+    position: relative;
+    display: inline-block;
+    background-color: #e0e0e000;
+    color: #f3f1b0;
+    font-size: inherit;
+    right: 25px;
+    float: right;
+}
+
+.inputs {
+    position: absolute;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    background: #00f;
+    z-index: 999;
+}
+
+.icons {
+    position: relative;
+}
+
+.modal-dialog {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.modal-content {
+    height: 100%;
+    border-radius: 0;
+}
+
+.full_modal-dialog {
+    width: 98% !important;
+    height: 92% !important;
+    min-width: 98% !important;
+    min-height: 92% !important;
+    max-width: 98% !important;
+    max-height: 92% !important;
+    padding: 0 !important;
+}
+
+.full_modal-content {
+    height: 99% !important;
+    min-height: 99% !important;
+    max-height: 99% !important;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, .0001) !important;
+}
+
+.imgbox {
+    display: grid;
+    height: 100%;
+}
+
+.center-fit {
+    max-width: 100%;
+    max-height: 100vh;
+    margin: auto;
+}
+
+.soporteText {
+    word-break: break-all;
+    word-wrap: break-word;
+    float: left;
+    width: fit-content;
+}
+
+.normalText {
+    word-break: break-all;
+    word-wrap: break-word;
+    float: right;
+    width: fit-content;
+}
+
+.card-footer {
+    padding: 0.75rem 0.25rem;
+    border-radius: 0 0 15px 15px !important;
+    border-top: 0 !important;
+}
+
+
+/* css chat */
+
+
+/* chat */

@@ -1,0 +1,86 @@
+
+<div fxLayout="row wrap" fxLayoutAlign="center center">
+    <div fxFlex.gt-sm="50%">
+        <mat-card>
+            
+            <mat-card-content>
+                <form [formGroup]="userForm" (ngSubmit)="loginUser()" novalidate>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm">
+                                <br>
+                                <br>
+                                <br>
+                                <h2 class="text-center" style="font-weight: bold;">Ingresar</h2>
+                                
+                                <mat-form-field class="email">
+                                    <input matInput placeholder="{{ 'LOGIN.EMAIL' | translate }}" type="email" required name="email" formControlName="email">
+                        
+                                    <mat-error *ngIf="userForm.get('email').hasError('required')">
+                                        El email es requerido.
+                                    </mat-error>
+                        
+                                    <mat-error *ngIf="userForm.get('email').hasError('pattern')">
+                                        Ingresa un email valido.
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field class="password">
+                                    <input matInput type="password" placeholder="{{ 'LOGIN.PASSWORD' | translate }}" required name="password" formControlName="password">
+                        
+                                    <mat-error *ngIf="userForm.get('password').hasError('required')">
+                                        La contraseña es requerida.
+                                    </mat-error>
+                                </mat-form-field>
+                                <div class="form-group">
+                                    <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                                    <label for="agree-term" class="label-agree-term"><span><span></span></span>Estoy de acuerdo con todas las declaraciones en
+                                   <a href="#" class="term-service" style="text-decoration: none; color: #000;">Términos de servicio</a></label>
+                                </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="text-center">
+                                <button mat-raised-button color="accent" type="submit" style="color:white;">{{ 'LOGIN.LOGIN' | translate }}</button></div>
+                            </div>
+                            <div class="col-sm">
+                                <br>
+                                <br>
+                                <br>
+                                <img src="assets/images/signin-image.jpg" alt="homepage" style="display: block; margin-left: auto;margin-right: auto;" >
+                                <br>
+                                <br>
+                                     <a href="registro.html" class="signup-image-link" style="text-decoration: none; color: #000;">¿No tienes una cuenta?Registrate aquí</a>
+                                
+                            </div>
+                          </div>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <div class="loading-indicator">
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</ng-template>
+
+
+<!-- open iframe -->
+<ng-template #iframeModal>
+    <h1 mat-dialog-title style="font-weight: bold;">Comprar suscripción</h1>
+    <mat-dialog-content>
+
+        <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
+        <div class="col-12">
+            <iframe [src]="urlPayout" style="width: 100%; height: 79vh; max-height: 79vh;" frameborder="0" (load)="onLoad()" name="ebook-player" id="ebook-player" allowfullscreen></iframe>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button class="btn btn-info" (click)="cancelar()">Cerrar</button>
+    </mat-dialog-actions>
+
+</ng-template>
+
+<!-- open iframe -->

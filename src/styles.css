@@ -1,0 +1,570 @@
+.material-icons.color_blue {
+    color: rgb(68, 161, 214);
+}
+
+.notfs{
+    color: #e63d43;
+    font-weight: bold;
+}
+.material-icons.color_orange {
+    color: rgb(167, 150, 137);
+}
+
+.material-icons.color_white {
+    color: rgb(255, 255, 255);
+}
+
+.material-icons.color_red {
+    color: rgb(219, 16, 16);
+}
+
+.material-icons.color_edit {
+    color: rgb(248, 233, 150);
+}
+
+.material-icons.color_horarios {
+    color: rgb(170, 184, 45);
+}
+
+.material-icons.color_hour {
+    color: rgb(91, 92, 87);
+}
+
+.material-icons.color_amar {
+    color: rgb(228, 124, 36);
+}
+
+.material-icons.color_gray {
+    color: rgb(80, 77, 77);
+}
+
+.material-icons.color_brown {
+    color: rgb(160, 131, 49);
+}
+
+.material-icons.color_green {
+    color: rgb(25, 141, 2);
+}
+
+.material-icons.color_pass {
+    color: rgb(10, 53, 78);
+}
+
+.button-add {
+    float: right;
+    color: #f9efd3;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: rgb(1, 104, 32) !important;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple {
+    background-color: red !important;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+    color: red!important;
+    opacity: 0.8!important;
+}
+
+.mat-input-element {
+    caret-color: rgb(7, 108, 155)!important;
+}
+
+.mat-form-field-invalid .mat-input-element,
+.mat-warn .mat-input-element {
+    caret-color: red!important;
+}
+
+.mat-form-field-label {
+    color: rgba(0, 0, 0, .6)!important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+    color: rgb(18, 146, 24)!important;
+}
+
+button:focus {
+    outline: none !important;
+    outline-style: none !important;
+}
+
+.mat-button-focus-overlay {
+    background-color: transparent!important;
+}
+.mat-icon-button {
+    background-color: #fff !important;
+}
+.mat-icon-button:hover {
+    background-color: #c3545e !important;
+}
+
+.mat-button:hover {
+    background-color: #efebe6 !important;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+    color: red!important;
+}
+
+.my-spinner .mat-dialog-container {
+    padding: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+    overflow: hidden !important;
+}
+
+
+.add-sucursal .mat-dialog-content {
+    width: 650px !important;
+    height: 100% !important;
+    overflow: auto;
+}
+
+.add-sucursal .mat-dialog-container {
+    width: 650px !important;
+    height: 100% !important;
+    overflow: auto;
+}
+
+.add-user .mat-dialog-container {
+    width: 750px !important;
+    height: 100% !important;
+}
+
+.add-promo .mat-dialog-container {
+    height: '100%' !important;
+    width: '100%' !important
+}
+
+.mat-dialog-content {
+    /*  overflow: initial !important; */
+    max-height: 76vh !important;
+}
+
+.horarios-modal .mat-dialog-container {
+    width: 500px !important;
+    height: 100% !important;
+}
+
+
+/* table */
+
+table {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 500px;
+}
+
+th.mat-header-cell {
+    text-align: left;
+    max-width: 300px;
+}
+
+.mat-header-cell {
+    justify-content: flex-end !important;
+    font-weight: bold !important;
+    color: black !important;
+    font-family: inherit !important;
+}
+
+.mat-flat-button.mat-accent,
+.mat-raised-button.mat-accent,
+.mat-fab.mat-accent,
+.mat-mini-fab.mat-accent {
+    background-color: #8A445D !important;
+   
+}
+
+
+/* table */
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #ffffff !important;
+}
+
+
+/* loading */
+
+.loading-indicator {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.loading-indicator:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* loading */
+
+.snackbarsuccess {
+    background-color: rgb(55, 167, 61) !important;
+    color: white !important
+}
+
+.snackbarerror {
+    background-color: rgb(143, 51, 51) !important;
+    color: white !important
+}
+
+.snackbarwarn {
+    background-color: rgb(221, 165, 61) !important;
+    color: white !important
+}
+
+.mat-simple-snackbar-action {
+    color: white !important;
+}
+
+.mat-card .mat-card-title {
+    padding-bottom: 10px !important;
+}
+
+.margin-div-input {
+    padding-bottom: 20px !important;
+}
+
+.alerts-empty {
+    text-align: center !important;
+    margin-top: 20px !important;
+    background-color:#c3545e !important;
+    color:white;
+}
+
+.alert-empty {
+    text-align: center !important;
+    margin-top: 20px !important;
+    background-color: #c3545e !important;
+    color:white;
+}
+
+.alert-broad {
+    text-align: center !important;
+    margin-top: 20px !important;
+    background-color: #c3545e !important;
+    color:white;
+}
+
+.mat-tab-body-content {
+    overflow: hidden !important;
+}
+
+
+/* promociones */
+
+.card-promos {
+    max-width: 400px;
+    -webkit-box-shadow: 10px 10px 47px -12px rgba(0, 0, 0, 0.75) !important;
+    -moz-box-shadow: 10px 10px 47px -12px rgba(0, 0, 0, 0.75)!important;
+    box-shadow: 10px 10px 47px -12px rgba(0, 0, 0, 0.75) !important;
+    background: rgba(242, 240, 234, 1);
+    background: linear-gradient(to bottom, rgba(242, 240, 234, 1) 0%, rgba(237, 230, 211, 0.81) 38%, rgba(240, 224, 187, 0.72) 54%, rgb(188, 94, 31) 100%) !important;
+}
+
+.size-img {
+    width: auto !important;
+    height: 200px;
+    text-align: center !important;
+    max-width: 100% !important;
+    padding-top: 4px;
+}
+
+.listaRelaciones {
+    height: 300px !important;
+    overflow-y: scroll;
+    border-radius: 5px;
+    border-style: double !important;
+    border-color: #c6a64f;
+}
+
+.alerts-empty {
+    border-radius: 5px;
+    border-style: double !important;
+    border-color: #f19731 !important;
+    height: 60px;
+    width: 100%;
+}
+
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+
+/* promociones */
+
+.listaRelaciones {
+    height: 225px !important;
+    overflow-y: scroll;
+    border-radius: 5px;
+    border-style: double !important;
+    border-color: #014c8c
+}
+
+.close {
+    cursor: pointer;
+    position: absolute;
+    font-weight: bold;
+    color: red;
+    top: 50%;
+    right: 0%;
+    padding: 12px 16px;
+    transform: translate(0%, -50%);
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    /* remove scrollbar space */
+    background: transparent;
+    /* optional: just make scrollbar invisible */
+}
+
+.close:hover {
+    background: rgb(247, 133, 133);
+}
+
+.go {
+    cursor: pointer;
+    position: absolute;
+    font-weight: bold;
+    color: rgb(40, 124, 33);
+    top: 50%;
+    right: 0%;
+    padding: 12px 16px;
+    transform: translate(0%, -50%);
+}
+
+.go:hover {
+    background: rgb(160, 247, 133);
+}
+
+
+/* CSS CHAT  */
+
+.cardHeader {
+    background-color: beige !important;
+}
+
+.usuarioNormal {
+    float: right !important;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 25px;
+    background-color: #e8e7d1 !important;
+    padding: 10px;
+    position: relative;
+    /* width: 50%; */
+    width: unset;
+    display: grid !important;
+}
+
+.userSoporte {
+    float: right !important;
+}
+
+.circle-iconChat {
+    background: #fffffd;
+    ;
+    padding: 12px;
+    border-radius: 100%;
+    color: #e8c144;
+    ;
+    width: fit-content;
+}
+
+.circle-iconSoporte {
+    background: #fdfdfd;
+    padding: 12px;
+    border-radius: 100%;
+    color: #6e9e4a;
+    width: fit-content;
+}
+
+.usuarioSoporte {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 25px;
+    background-color: #dcf8c6;
+    padding: 10px;
+    position: relative;
+    /* width: 50%; */
+    width: unset;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    overflow-x: hidden !important;
+}
+
+body {
+    background-color: #ffffff;
+    font-family: "Calibri", "Roboto", sans-serif;
+}
+
+.chat_window {
+    position: absolute;
+    width: calc(100% - 20px);
+    max-width: 800px;
+    height: 500px;
+    border-radius: 10px;
+    background-color: #fff;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    background-color: #f8f8f8;
+    overflow: hidden;
+}
+
+.top_menu {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 20px 0 0px;
+    box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+    scrollbar-width: none;
+}
+
+.top_menu .buttons {
+    margin: 3px 0 0 20px;
+    position: absolute;
+}
+
+.top_menu .title {
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.messages {
+    background-color: #e2e2e2 !important;
+    position: relative;
+    list-style: none;
+    padding: 20px 10px 0 10px;
+    margin: 0;
+    height: 470px;
+    overflow: scroll !important;
+    overflow-x: hidden !important;
+    scrollbar-width: none
+}
+
+.bottom_wrapper {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px 20px;
+    bottom: 0;
+}
+
+.bottom_wrapper .message_input_wrapper {
+    display: inline-block;
+    height: 50px;
+    border-radius: 25px;
+    border: 1px solid #bcbdc0;
+    width: calc(100% - 160px);
+    position: relative;
+    padding: 0 20px;
+    width: 75%;
+}
+
+.bottom_wrapper .message_input_wrapper .message_input {
+    border: none;
+    height: 100%;
+    box-sizing: border-box;
+    width: calc(100% - 40px);
+    position: absolute;
+    outline-width: 0;
+    color: gray;
+}
+
+.bottom_wrapper .send_message {
+    width: 70px;
+    height: 50px;
+    display: inline-block;
+    border-radius: 50px;
+    background-color: #a3d063;
+    border: 2px solid #a3d063;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s linear;
+    text-align: center;
+    float: right;
+}
+
+.rounded-circle {
+    border-radius: 50%!important;
+}
+
+.user_img_msg {
+    height: 40px;
+    width: 40px;
+    border: 1.5px solid #f5f6fa;
+}
+
+.bottom_wrapper .send_message:hover {
+    color: #a3d063;
+    background-color: #fff;
+}
+
+.bottom_wrapper .send_message .text {
+    font-size: 18px;
+    font-weight: 300;
+    display: inline-block;
+    line-height: 48px;
+}
+
+.spanTextoUser {
+    margin-left: 8px !important;
+    font-size: small;
+}
+
+.spanTextoUserChat {
+    margin-right: 8px !important;
+    font-size: small;
+}
+
+.spanTextoHourSoporte {
+    font-size: x-small;
+    float: right;
+}
+
+.spanTextoHourChat {
+    font-size: x-small;
+    float: left;
+}
+
+#input {
+    margin-bottom: 16px;
+}
+
+
+/* CSS CHAT  */
+
+.success-btn {
+    color: #35dc5f !important;
+    border-color: #35dc35 !important;
+}

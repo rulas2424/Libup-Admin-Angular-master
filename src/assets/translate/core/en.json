@@ -1,0 +1,10 @@
+{
+    "LOGIN": {
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "LOGIN": "Log In"
+    },
+    "HOME": {
+        "TITLE": "Hello Angular"
+    }
+}

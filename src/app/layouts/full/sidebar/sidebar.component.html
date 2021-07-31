@@ -1,0 +1,168 @@
+<!-- ============================================================== -->
+<!-- sidebar -->
+<!-- ============================================================== -->
+
+<mat-nav-list appAccordion>
+    <!-- <mat-list-item appAccordionLink *ngFor="let menuitem of menuItems.getMenuitem()" routerLinkActive="selected" group="{{menuitem.state}}">
+        <a class="" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
+            <mat-icon>{{ menuitem.icon }}</mat-icon> 
+            <span>{{ menuitem.name }}</span> 
+            <span fxFlex></span> 
+            <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span> 
+        </a>
+    </mat-list-item>
+ -->
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="comercios" *ngIf="decriptValue() === 'SuperAdmin' || decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/comercios']">
+            <mat-icon>store_mall_directory</mat-icon>
+            <span>{{commerce}}</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="categorias" *ngIf="decriptValue() === 'SuperAdmin'">
+        <a class="" appAccordionToggle [routerLink]="['/categorias']">
+            <mat-icon>category</mat-icon>
+            <span>Categorías</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="usuarios-app" *ngIf="decriptValue() === 'SuperAdmin'">
+        <a class="" appAccordionToggle [routerLink]="['/usuarios-app']">
+            <mat-icon>people_alt</mat-icon>
+            <span>Usuarios App</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="usuarios-admin" *ngIf="decriptValue() === 'SuperAdmin'">
+        <a class="" appAccordionToggle [routerLink]="['/usuarios-admin']">
+            <mat-icon>perm_identity</mat-icon>
+            <span>Usuarios Admin</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="promociones" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/promociones']">
+            <mat-icon>dynamic_feed</mat-icon>
+            <span>Promociones</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="descuentos" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/descuentos']">
+            <mat-icon>receipt</mat-icon>
+            <span>Descuentos</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="premios" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/agregar/premios']">
+            <mat-icon>card_giftcard</mat-icon>
+            <span>Premios/Tickteos</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="concursop" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/concursos/comercio']">
+            <mat-icon>layers</mat-icon>
+            <span>Concursos<br>Audio y Tickteo</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="concursod" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/concurso/directo']">
+            <mat-icon>layers</mat-icon>
+            <span>Concurso Directo</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="radios" *ngIf="decriptValue() === 'Radio'">
+        <a class="" appAccordionToggle [routerLink]="['/contratos/comercio']">
+            <mat-icon>card_membership</mat-icon>
+            <span>Verificar contratos</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="audios" *ngIf="decriptValue() === 'Radio'">
+        <a class="" appAccordionToggle [routerLink]="['/agregar/audios']">
+            <mat-icon>settings_input_antenna</mat-icon>
+            <span>Agregar Audios</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="concursos" *ngIf="decriptValue() === 'Radio'">
+        <a class="" appAccordionToggle [routerLink]="['/concursos']">
+            <mat-icon>layers</mat-icon>
+            <span>Concursos</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="notificaciones" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/notificaciones']">
+            <mat-icon>add_alert</mat-icon>
+            <span>Notificaciones</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="radiodifusoras" *ngIf="decriptValue() === 'SuperAdmin'">
+        <a class="" appAccordionToggle [routerLink]="['/radiodifusoras']">
+            <mat-icon>settings_input_antenna</mat-icon>
+            <span>Radiodifusoras</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="canales" *ngIf="decriptValue() === 'Radio'">
+        <a class="" appAccordionToggle [routerLink]="['/canales']">
+            <mat-icon>chat</mat-icon>
+            <span>Canales</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="relation" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/radiodifusoras/comercio']">
+            <mat-icon>card_membership</mat-icon>
+            <span>Contratos</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="ganadores" *ngIf="decriptValue() === 'Radio' || decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/ganadores/ticktear']">
+            <mat-icon>toys</mat-icon>
+            <span *ngIf="decriptValue() =='Comercio'">Ganadores <br>Tickteo/Radio</span>
+            <span *ngIf="decriptValue() =='Radio'">Ganadores Audio</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="directos" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/ganadores/directos']">
+            <mat-icon>toys</mat-icon>
+            <span>Ganadores Directos</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected" group="video" *ngIf="decriptValue() === 'Comercio'">
+        <a class="" appAccordionToggle [routerLink]="['/video']">
+            <mat-icon>toys</mat-icon>
+            <span>Ayuda</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+</mat-nav-list>

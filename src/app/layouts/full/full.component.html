@@ -1,0 +1,37 @@
+<div class="main-container">
+    <mat-toolbar color="" style="background-color: rgb(0, 0, 0);" class="topbar telative" id="mitoolbar">
+        <div class="navbar-header">
+            <a class="navbar-brand">
+                <b>
+                    <!-- Logo icon -->
+                    <img src="assets/images/logow.png" alt="homepage" class="light-logo">
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text -->
+                <span fxShow="false" fxShow.gt-xs>
+                 <!-- Logo text -->    
+                
+                </span> </a>
+        </div>
+
+        <button mat-icon-button *ngIf="cookieService.check('isLogin')" id="menu" (click)="snav.toggle()" value="sidebarclosed">
+                <mat-icon>menu</mat-icon>
+            </button>
+             <span fxFlex></span>
+        <app-select-language></app-select-language>
+        <app-header></app-header>
+    </mat-toolbar>
+    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
+        <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" stlye="background-color:#000;" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0" [opened]="cookieService.check('isLogin')" [disableClose]="mobileQuery.matches">
+            <!--SideBar-->
+            <app-sidebar></app-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content class="page-wrapper">
+            <div class="page-content" id="pageContent">
+                <router-outlet>
+                    <app-spinner></app-spinner>
+                </router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

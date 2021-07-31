@@ -1,0 +1,35 @@
+/**
+ * Table Of Content
+ *
+ * 	1. Globals
+ *	2. Headers
+ *	3. Navigations
+ *	4. Banners
+ *	5. Footers
+ *	6. app
+ *	7. Widgets
+ *	8. Custom Templates
+ */
+
+@import 'variable';
+
+@import 'spinner';
+@import 'app';
+@import 'header';
+@import 'pages';
+@import 'sidebar';
+@import 'responsive';
+.full-screen-modal {
+    max-width: unset !important;
+    width: 100%;
+    /* height: 100%; */
+    .mat-dialog-container {
+      max-width: 100vw;
+     /*  max-height: 100vh; */
+      height: 100%;
+      width: 100%;
+      .mat-dialog-content {
+       /*  max-height: unset !important; */
+      }
+    }
+  }

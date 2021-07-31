@@ -1,0 +1,435 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    Premios
+                    <button matTooltip="Agregar un premio" class="button-add" (click)="openDialogAddPromos(promos)" mat-raised-button color="accent">
+                        <mat-icon class="color_amar">add_box</mat-icon> Agregar
+                    </button>
+
+                </mat-card-title>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12" *ngFor="let promo of promociones">
+                        <mat-card class="card-promos">
+                            <mat-card-header>
+                                <mat-card-title>{{promo.name}}</mat-card-title>
+                                <mat-card-subtitle>
+                                    <mat-slide-toggle id="{{promo.idPromo}}" [checked]="setActiveOrNot(promo)" [disabled]="promo.isDateActive == false" (change)="changeStatusActive($event, promo.idPromo)">{{textStatus(promo)}}</mat-slide-toggle>
+                                </mat-card-subtitle>
+
+                            </mat-card-header>
+                            <div style="text-align: center;">
+                                <img class="size-img" style="cursor: pointer;" (click)="openImage(imageModal, promo.image)" mat-card-image src="{{serverImages}}{{promo.image}}" alt="Image Promo">
+                            </div>
+                            <mat-card-actions>
+                                <button mat-icon-button *ngIf="promo.awardType == 'Ticktear'" color="primary" matTooltip="Crear concurso para tickteo" (click)="openDialogConfirm(promo, confirm)" >
+                                    <mat-icon class="mat-18 material-icons color_edit">control_point</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary" matTooltip="Eliminar Premio" (click)="openDialogConfirmDelete(promo, delete)">
+                                    <mat-icon class="mat-18 material-icons color_edit">delete_forever</mat-icon>
+                                </button>
+
+                                <span style="color: white;">{{promo.awardType}}</span>
+                                <button mat-icon-button color="primary" style="float:  right" matTooltip="ver o editar promoción" (click)="openDialogUpdatePromo(promo, promos)">
+                                    <mat-icon class="mat-18 material-icons color_edit">edit</mat-icon>
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                </div>
+
+                <div *ngIf="promociones.length == 0 && isLoaded" class="alert alert-empty" role="alert">
+                    No existen premios!
+                </div>
+                <mat-paginator *ngIf="promociones.length > 0" #paginator [length]="totalLength" [pageSize]="limit" [pageSizeOptions]="pageLimit" (page)="changePage($event)">
+                </mat-paginator>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <ng-template #spinner>
+        <div class="loading-indicator">
+            <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+        </div>
+    </ng-template>
+
+    <!-- ////add or update promo -->
+    <ng-template #promos>
+        <button class="btn btn-outline-secondary" mat-dialog-close style="float: right">Cerrar</button>
+        <h1 mat-dialog-title>{{title}}</h1>
+        <div mat-dialog-content>
+            <mat-horizontal-stepper linear #stepper>
+                <mat-step [stepControl]="formPromos" [editable]="isEditable">
+                    <form [formGroup]="formPromos" novalidate>
+                        <ng-template matStepLabel>Datos de Premio</ng-template>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <input matInput placeholder="Nombre" maxlength="100" formControlName="name" required>
+                                    <mat-error *ngIf="formPromos.get('name').hasError('required')">
+                                        El nombre del premio es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <textarea maxlength="200" formControlName="description" matInput placeholder="Descripción"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3 margin-div-input">
+
+                                <mat-form-field>
+                                    <mat-label>Tipo de premio</mat-label>
+                                    <mat-select formControlName="typePremio" required>
+                                        <mat-option *ngFor="let premio of premioType" (click)="setValueTypePremio(premio.value)" [value]="premio.value">
+                                            {{premio.type}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formPromos.get('typePremio').hasError('required')">
+                                        El tipo premio es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-3 margin-div-input">
+
+                                <mat-form-field>
+                                    <mat-label>Notificaciones</mat-label>
+                                    <mat-select formControlName="notify" [disabled]="typePremio !== 'Directo'">
+                                        <mat-option *ngFor="let not of notificacion" (click)="setTimeSeconds(not.value)" [value]="not.value">
+                                            {{not.type}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formPromos.get('notify').hasError('required')">
+                                        El valor es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-3 margin-div-input" *ngIf="notificacionValue == 1">
+
+                                <mat-form-field>
+                                    <input matInput placeholder="Duración en seg." maxlength="10" formControlName="time">
+                                    <mat-error *ngIf="formPromos.get('time').hasError('required')">
+                                        El tiempo es requerido en segundos
+                                    </mat-error>
+                                    <mat-error *ngIf="formPromos.get('time').hasError('pattern')">
+                                        Solo se permiten números enteros
+                                    </mat-error>
+                                    <mat-error *ngIf="formPromos.get('time').hasError('max')">
+                                        El limite máximo es: {{apiconf.tiempoSegundos}} segundos
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-3 margin-div-input" *ngIf="typePremio === 'Audio'">
+
+                                <mat-form-field>
+                                    <mat-label>Estación de radio</mat-label>
+                                    <mat-select formControlName="estacion">
+                                        <mat-option *ngFor="let est of relationBroadcasterShop" [value]="est.idBroadcaster">
+                                            {{est.nameBroadcaster}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formPromos.get('estacion').hasError('required')">
+                                        La estación es requerida.
+                                    </mat-error>
+                                    <mat-error *ngIf="relationBroadcasterShop.length == 0">
+                                        No existen radiodifusoras contratadas o la radio no tiene contrato contigo.
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <input matInput placeholder="Código de promoción" maxlength="100" formControlName="code">
+                                    <mat-error *ngIf="formPromos.get('code').hasError('required')">
+                                        El código de promoción es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <input matInput placeholder="Url promoción o página web" maxlength="200" formControlName="urlPromo">
+                                    <mat-error *ngIf="formPromos.get('urlPromo').hasError('required')">
+                                        El url de promoción o página web es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-4 col-sm-12 margin-div-input">
+
+                                
+                                <mat-form-field>
+                                    <input matInput formControlName="releaseDate"   type="date" min="{{minDate }}" (change)="onChangeDateMin($event.target.value)" placeholder="Fecha de inicio" required>
+                                    <mat-error *ngIf="formPromos.get('releaseDate').hasError('required')">
+                                        La fecha de inicio es requerida.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-2 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <input matInput formControlName="hourStartDate" type="time" placeholder="Hora de inicio" required>
+                                    <mat-error *ngIf="formPromos.get('hourStartDate').hasError('required')">
+                                        La hora de inicio es requerida.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <input matInput type="date"  formControlName="dueDate" min="{{minDateDueDate}}" max="{{maxDate}}" placeholder="Fecha de término" required>
+                                    <mat-error *ngIf="formPromos.get('dueDate').hasError('required')">
+                                        La fecha de término es requerida.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-2 col-sm-12 margin-div-input">
+                                <mat-form-field>
+                                    <input matInput type="time" formControlName="hourEndDate" placeholder="Hora de término" required>
+                                    <mat-error *ngIf="formPromos.get('hourEndDate').hasError('required')">
+                                        La hora de término es requerida.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <br>
+                            <div class="col-md-6 col-sm-12">
+
+                                <input type="file" accept="image/png,image/jpg,image/jpeg" id="selectFile" (change)="onFileChange()" formControlName="imageSelect" name="selectFile" class="img-upload-btn" />
+
+                                <mat-error *ngIf="formPromos.get('imageSelect').hasError('required')">
+                                    La imagen del premio es requerida.
+                                </mat-error>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <mat-form-field>
+                                    <mat-label>Premio de consolación</mat-label>
+                                    <mat-select formControlName="imageLost">
+                                        <mat-option *ngFor="let promo of promosOrDiscounts" [value]="promo.idPromo"><span style="font-weight: bold; font-size: small;">({{promo.promoType}}) </span>{{promo.name}}
+                                            <img with="40" height="40" src="{{serverImages}}{{promo.image}}">
+                                
+                                        </mat-option>                                
+                                    </mat-select>
+                                    <mat-error *ngIf="formPromos.get('imageLost').hasError('required')">
+                                        El premio de consolación es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- <input type="file" accept="image/png,image/jpg,image/jpeg" id="imageLost" (change)="onFileChangeLostImage()" formControlName="imageLost" name="selectFile" class="img-upload-btn" />
+
+                                <mat-error *ngIf="formPromos.get('imageLost').hasError('required')">
+                                    La imagen de no ganador es requerida.
+                                </mat-error> -->
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-top: 30px">
+                            <div class="col-md-6 col-sm-12" *ngIf="isUpdate">
+                                <div style="text-align: center">
+                                    <img style="cursor: pointer;" src="{{serverImages}}{{imagePromo}}" (click)="openModalImage(imageModal)" alt="logotipo" height="50">
+                                </div>
+                                <div style="text-align: center">
+                                    <span>Imagen actual promo</span>
+                                </div>
+                            </div>
+                          <!--   <div class="col-md-6 col-sm-12" *ngIf="isUpdate">
+                                <div style="text-align: center">
+                                    <img style="cursor: pointer;" src="{{serverImagesLost}}{{imagePromoLost}}" (click)="openModalImage(lostImage)" alt="logotipo" height="50">
+                                </div>
+                                <div style="text-align: center">
+                                    <span>Imagen actual no ganador</span>
+                                </div>
+                            </div> -->
+                        </div>
+                        <mat-dialog-actions align="end">
+                            <button class="btn btn-success" matStepperNext>Siguiente</button>
+                        </mat-dialog-actions>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="formBranches" [editable]="isEditable">
+                    <ng-template matStepLabel>Sucursales</ng-template>
+                    <div class="row" *ngIf="branchesList.length == 0">
+                        <div class="alert alerts-empty" role="alert">
+                            El comercio no tiene sucursales.
+                            <button matTooltip="Agregar sucursales" class="button-add" (click)="goToAddSchedules()" mat-raised-button color="accent">
+                                Agregar
+                                <mat-icon class="color_amar">play_arrow</mat-icon>
+                            </button>
+                            <br>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="branchesList.length > 0">
+                        <p>Selecciona las sucursales a las que aplica el premio</p>
+                        <div class="col-12">
+
+                            <form [formGroup]="formBranches">
+                                <div class="listaRelaciones">
+                                    <mat-selection-list formControlName="branch">
+                                        <mat-list-option #allSelected (click)="toggleAllSelection()" [value]="0">Todas</mat-list-option>
+                                        <mat-list-option *ngFor="let branch of branchesList " id="{{branch.idBranch}}" [selected]="verifySelectedBranch(branch.idBranch)" [value]="branch.idBranch">
+                                            {{branch.address}}
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <mat-error *ngIf="formBranches.get('branch').hasError('required')">
+                                    Selecciona al menos una sucursal
+                                </mat-error>
+                                <mat-dialog-actions align="end">
+                                    <button class="btn btn-info" style="margin-right: 5px;" matStepperPrevious>Regresar</button>
+                                    <button class="btn btn-success" matStepperNext>Siguiente</button>
+                                </mat-dialog-actions>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </mat-step>
+                <mat-step [stepControl]="formCategories" [editable]="isEditable">
+                    <ng-template matStepLabel>Categorías</ng-template>
+                    <div class="row" *ngIf="categoriesList.length == 0">
+                        <div class="alert alerts-empty" role="alert">
+                            El comercio no tiene asignadas categorías.
+                            <button matTooltip="Relacionar categorías" class="button-add" (click)="goToAddCategories()" mat-raised-button color="accent">
+                                Agregar
+                                <mat-icon class="color_amar">play_arrow</mat-icon>
+                            </button>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="categoriesList.length > 0">
+                        <p>Selecciona a que categorías aplica el premio</p>
+                        <div class="col-12">
+
+                            <form [formGroup]="formCategories">
+                                <div class="listaRelaciones">
+                                    <mat-selection-list formControlName="category">
+                                        <mat-list-option #allSelectedCat (click)="toggleAllSelectionCat()" [value]="0">Todas</mat-list-option>
+                                        <mat-list-option *ngFor="let cat of categoriesList" [selected]="verifySelectedCat(cat.idCategory)" [value]="cat.idCategory">
+                                            {{cat.nameCategory}}
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <mat-error *ngIf="formCategories.get('category').hasError('required')">
+                                    Selecciona al menos una categoría
+                                </mat-error>
+                                <mat-dialog-actions align="end">
+                                    <button class="btn btn-info" style="margin-right: 5px;" matStepperPrevious>Regresar</button>
+                                    <button class="btn btn-success" matStepperNext>Siguiente</button>
+                                </mat-dialog-actions>
+                            </form>
+
+                        </div>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Guardar</ng-template>
+                    <p style="color: orange;">{{textEnd}}</p>
+
+                    <mat-dialog-actions align="end">
+                        <button class="btn btn-info" style="margin-right: 5px;" matStepperPrevious>Regresar</button>
+                        <button class="btn btn-success" (click)="addOrUpdatePromo()">{{textButonSave}}</button>
+                        <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+                    </mat-dialog-actions>
+                </mat-step>
+            </mat-horizontal-stepper>
+
+
+        </div>
+
+
+
+
+    </ng-template>
+
+    <!-- ////add or update promo -->
+
+    <!-- open image modal -->
+    <ng-template #imageModal>
+        <h1 mat-dialog-title>Imagen previa</h1>
+        <div mat-dialog-content>
+            <img src="{{serverImages}}{{imagePromo}}" alt="logotipo" width="600">
+
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- ////open image modal -->
+
+    <!-- open image modal -->
+    <ng-template #lostImage>
+        <h1 mat-dialog-title>Imagen previa</h1>
+        <div mat-dialog-content>
+            <img src="{{serverImagesLost}}{{imagePromoLost}}" alt="logotipo" width="600">
+
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button class="btn btn-outline-secondary" mat-dialog-close>Cerrar</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- ////open image modal -->
+
+    <!-- confirmar si se crea el concurso -->
+    <ng-template #confirm>
+        <h1 mat-dialog-title>¿Deseas crear el concurso?</h1>
+        <div mat-dialog-content>
+            <h4>Premio:
+                <b>{{premioConcurso}}</b>
+            </h4>
+            <img src="{{serverImages}}{{imageConcurso}}" alt="logotipo" width="600">
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button class="btn btn-danger" style="margin-right: 5px;" mat-dialog-close>Cancelar</button>
+            <button class="btn btn-success" mat-dialog-close (click)="createConcurso()">Crear</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- confirmar si se crea el concurso -->
+
+
+    <!-- confirmar si se elimina el premio -->
+    <ng-template #delete>
+        <h1 mat-dialog-title>¿Deseas eliminar el premio?</h1>
+        <div mat-dialog-content>
+            <h4>Premio:
+                <b>{{premioConcurso}}</b>
+            </h4>
+            <img src="{{serverImages}}{{imageConcurso}}" alt="logotipo" width="600">
+        </div>
+
+        <mat-dialog-actions align="end">
+            <button class="btn btn-danger" style="margin-right: 5px;" mat-dialog-close>Cancelar</button>
+            <button class="btn btn-success" mat-dialog-close (click)="deletePromo()">Eliminar</button>
+        </mat-dialog-actions>
+
+
+    </ng-template>
+
+    <!-- confirmar si se crea el concurso -->
